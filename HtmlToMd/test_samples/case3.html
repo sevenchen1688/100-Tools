@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESTful API 设计指南</title>
+</head>
+<body>
+    <h1>RESTful API 设计指南</h1>
+    
+    <h2>概述</h2>
+    <p>REST（Representational State Transfer）是一种软件架构风格，用于设计网络应用。RESTful API 遵循 REST 原则，提供了一组标准化的接口设计方法。</p>
+    
+    <h2>核心原则</h2>
+    <p>RESTful API 设计遵循以下核心原则：</p>
+    <ul>
+        <li><strong>无状态性</strong>：每个请求都包含所有必要的信息</li>
+        <li><strong>统一接口</strong>：使用标准化的接口设计</li>
+        <li><strong>可缓存</strong>：响应应该明确标识是否可缓存</li>
+        <li><strong>分层系统</strong>：客户端不需要知道是否连接到最终服务器</li>
+    </ul>
+    
+    <h2>HTTP 方法</h2>
+    <p>RESTful API 使用标准的 HTTP 方法来执行操作：</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>方法</th>
+                <th>描述</th>
+                <th>示例</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>获取资源</td>
+                <td>GET /users</td>
+            </tr>
+            <tr>
+                <td>POST</td>
+                <td>创建资源</td>
+                <td>POST /users</td>
+            </tr>
+            <tr>
+                <td>PUT</td>
+                <td>更新资源（完整）</td>
+                <td>PUT /users/1</td>
+            </tr>
+            <tr>
+                <td>PATCH</td>
+                <td>更新资源（部分）</td>
+                <td>PATCH /users/1</td>
+            </tr>
+            <tr>
+                <td>DELETE</td>
+                <td>删除资源</td>
+                <td>DELETE /users/1</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>状态码</h2>
+    <p>API 应该返回适当的 HTTP 状态码：</p>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>状态码</th>
+                <th>含义</th>
+                <th>使用场景</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>200</td>
+                <td>OK</td>
+                <td>请求成功</td>
+            </tr>
+            <tr>
+                <td>201</td>
+                <td>Created</td>
+                <td>资源创建成功</td>
+            </tr>
+            <tr>
+                <td>400</td>
+                <td>Bad Request</td>
+                <td>请求参数错误</td>
+            </tr>
+            <tr>
+                <td>401</td>
+                <td>Unauthorized</td>
+                <td>未授权</td>
+            </tr>
+            <tr>
+                <td>403</td>
+                <td>Forbidden</td>
+                <td>禁止访问</td>
+            </tr>
+            <tr>
+                <td>404</td>
+                <td>Not Found</td>
+                <td>资源不存在</td>
+            </tr>
+            <tr>
+                <td>500</td>
+                <td>Internal Server Error</td>
+                <td>服务器内部错误</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <h2>API 设计示例</h2>
+    <p>以下是一个用户管理 API 的设计示例：</p>
+    
+    <h3>获取用户列表</h3>
+    <pre><code>GET /api/users
+Host: example.com
+Accept: application/json</code></pre>
+    
+    <h3>创建用户</h3>
+    <pre><code>POST /api/users
+Host: example.com
+Content-Type: application/json
+
+{
+    "name": "张三",
+    "email": "zhangsan@example.com",
+    "age": 25
+}</code></pre>
+    
+    <h3>更新用户</h3>
+    <pre><code>PATCH /api/users/1
+Host: example.com
+Content-Type: application/json
+
+{
+    "age": 26
+}</code></pre>
+    
+    <h3>删除用户</h3>
+    <pre><code>DELETE /api/users/1
+Host: example.com</code></pre>
+    
+    <h2>响应格式</h2>
+    <p>API 响应应该使用统一的 JSON 格式：</p>
+    
+    <h3>成功响应</h3>
+    <pre><code>{
+    "code": 200,
+    "message": "success",
+    "data": {
+        "id": 1,
+        "name": "张三",
+        "email": "zhangsan@example.com"
+    }
+}</code></pre>
+    
+    <h3>错误响应</h3>
+    <pre><code>{
+    "code": 400,
+    "message": "参数错误",
+    "errors": [
+        {
+            "field": "email",
+            "message": "邮箱格式不正确"
+        }
+    ]
+}</code></pre>
+    
+    <h2>最佳实践</h2>
+    <ul>
+        <li>使用名词而不是动词来命名资源</li>
+        <li>使用复数形式表示资源集合</li>
+        <li>使用嵌套资源表示关系</li>
+        <li>提供分页、排序、过滤功能</li>
+        <li>实现版本控制</li>
+        <li>提供 API 文档</li>
+    </ul>
+    
+    <h2>总结</h2>
+    <p>RESTful API 设计需要遵循一系列原则和最佳实践。通过合理的设计，可以创建出易于使用、可维护的 API 接口。</p>
+</body>
+</html>
