@@ -5,8 +5,15 @@ from pathlib import Path
 from typing import List, Optional, Tuple, Dict, Any
 from PIL import Image
 import fitz
-from pypdf import PdfReader, PdfWriter, PdfMerger
-from pypdf.errors import PdfReadError
+try:
+    from pypdf import PdfReader, PdfWriter
+except ImportError:
+    from PyPDF2 import PdfReader, PdfWriter
+
+try:
+    from pypdf.errors import PdfReadError
+except ImportError:
+    from PyPDF2.errors import PdfReadError
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -409,17 +416,18 @@ class PDFOperations:
 
     def merge_pdfs(self, pdf_paths: List[str], output_path: str) -> str:
         try:
-            merger = PdfMerger()
+            writer = PdfWriter()
             total = len(pdf_paths)
             
             for i, pdf_path in enumerate(pdf_paths):
                 self._report_progress(i + 1, total, f"正在合并: {Path(pdf_path).name}")
-                merger.append(pdf_path)
+                reader = PdfReader(pdf_path)
+                for page in reader.pages:
+                    writer.add_page(page)
             
             self._report_progress(total, total, "正在保存...")
             with open(output_path, 'wb') as output_file:
-                merger.write(output_file)
-            merger.close()
+                writer.write(output_file)
             
             self._report_progress(100, 100, f"PDF合并完成: {output_path}")
             return output_path
